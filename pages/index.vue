@@ -1,18 +1,38 @@
 <template>
   <div id="app" class="container">
-    <div id="nav">
-      <Navigation></Navigation>
+    <Navigation></Navigation>
+
+    <div class="top">
+      <h1>Vue CLIを使って作ってみたSPA</h1>
+      <h3>Cat Fact</h3>
+      <p>
+        axiosを使って<a href="https://alexwohlbruck.github.io/cat-facts/">cat-facts</a>から取得した猫の話を表示します
+      </p>
+      <blockquote id="cat-fact">
+        {{ cat_fact }}
+      </blockquote>
     </div>
   </div>
 </template>
 
 <script>
 import Navigation from '@/components/Navigation.vue'
+import axios from '@nuxtjs/axios'
 
 export default {
   name: 'App',
   components: {
     Navigation
+  },
+  data: () => {
+    return {
+      cat_fact: 'loading'
+    }
+  },
+  mounted: async function(){
+    const response = await this.$axios.$get('https://cat-fact.herokuapp.com/facts/random')
+    console.log(response);
+    this.cat_fact = response.text
   }
 }
 </script>
@@ -25,18 +45,15 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
-#nav {
-  padding: 30px;
+h3 {
+  margin: 40px 0 0;
 }
+#cat-fact {
+  padding: 1em;
+  width: 40em;
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+  position: relative;
+  left: calc(50% - 23em);
+  background-color: darkgray;
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-
 </style>
